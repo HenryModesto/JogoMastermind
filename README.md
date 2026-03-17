@@ -1,31 +1,53 @@
-# Mastermind Game
+<h1 align="center">🎮 Mastermind Game - API RESTful com Flask + Angular</h1>
 
-## Breve descrição da solução e das decisões técnicas relevantes
-
-Este projeto consiste na implementação do jogo clássico **Mastermind**, utilizando uma arquitetura baseada em **API RESTful**.
-
-A aplicação foi dividida em duas partes principais:
-
-- **Backend:** desenvolvido em **Python utilizando Flask**, responsável pela lógica do jogo, autenticação dos usuários, persistência de dados e exposição dos endpoints da API.
-- **Frontend:** desenvolvido em **Angular**, responsável pela interface do usuário, interação com o tabuleiro do jogo e comunicação com a API.
-
-### Principais decisões técnicas
-
-- Utilização de **arquitetura em camadas (Controller → Service → Repository)** no backend para separar responsabilidades.
-- Comunicação entre frontend e backend via **API RESTful**.
-- Uso de **Angular Services** para centralizar chamadas HTTP para a API.
-- Persistência das partidas, tentativas e ranking dos jogadores em banco de dados relacional.
-- O **código secreto do jogo é gerado e mantido exclusivamente no backend**, garantindo integridade da lógica do jogo.
+<p align="center">
+   Aplicação fullstack para o jogo Mastermind
+</p>
 
 ---
 
-# Pré-requisitos
+## 📌 Sobre o Projeto
+
+O **Mastermind Game** é uma aplicação **fullstack** desenvolvida utilizando **Angular no frontend** e **Python com Flask no backend**, seguindo o padrão de **API RESTful**.
+
+A aplicação permite que usuários se autentiquem, iniciem partidas do jogo **Mastermind** e tenham suas tentativas registradas em banco de dados, possibilitando também a visualização de um **ranking de jogadores**.
+
+O backend é responsável por:
+
+- autenticação dos usuários
+- geração do código secreto
+- validação das tentativas
+- persistência das partidas
+- cálculo de ranking
+
+Já o frontend Angular fornece a interface visual do jogo, com telas de login, dashboard, tabuleiro do jogo e ranking.
+
+### 🧠 Decisões Técnicas Relevantes
+
+- Separação entre **frontend e backend** utilizando arquitetura **API RESTful**.
+- Backend estruturado em **camadas (Controller → Service → Repository)** para melhor organização do código.
+- O **código secreto do jogo é gerado e mantido apenas no backend**, garantindo integridade das regras do jogo.
+- Persistência das partidas e tentativas utilizando banco de dados relacional.
+- Comunicação entre Angular e Flask através de **HTTP Requests via Angular Services**.
+
+---
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10-blue?logo=python" />
+  <img src="https://img.shields.io/badge/Flask-REST%20API-green?logo=flask" />
+  <img src="https://img.shields.io/badge/Angular-Frontend-red?logo=angular" />
+  <img src="https://img.shields.io/badge/SQLite-Database-lightgrey?logo=sqlite" />
+</p>
+
+---
+
+# 📦 Pré-requisitos
 
 Antes de rodar o projeto localmente, é necessário ter instalado:
 
 ### Backend
 
-- Python **3.10+**
+- Python **3.10 ou superior**
 - pip
 
 ### Frontend
