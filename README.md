@@ -33,4 +33,3 @@ O backend segue uma arquitetura em camadas baseada no padrão:
       
 Controller → Service → Repository
 
-Essa estrutura separa responsabilidades e melhora a organização do código.
