@@ -1,6 +1,9 @@
 import random
+import time
 from models.game import Game
+from models.score import Score
 from repositories.game_repository import GameRepository
+from db import db
 
 class GameService:
 
@@ -36,6 +39,18 @@ class GameService:
 
         if correct == 4 or game.attempts_count >= 10:
             game.finished = True
+            game.end_time = time.time()
+
+            time_spent = int(game.end_time - game.start_time)
+            points = max(0, 100 - (game.attempts_count * 10))
+
+            score = Score(
+                user_id=game.user_id,
+                points=points,
+                time_spent=time_spent
+            )
+
+            db.session.add(score)
 
         GameRepository.update()
 

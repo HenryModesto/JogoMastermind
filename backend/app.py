@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from config import Config
-from db import db  # 👈 IMPORTA DO DB
+from db import db
 
 def create_app():
     app = Flask(__name__)
@@ -21,7 +21,9 @@ def create_app():
 
     return app
 
+
 app = create_app()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

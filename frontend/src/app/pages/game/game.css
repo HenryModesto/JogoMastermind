@@ -1,0 +1,60 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.row-number {
+  width: 30px;
+  font-weight: bold;
+}
+
+.slots {
+  display: flex;
+  gap: 10px;
+}
+
+.circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+}
+
+.r { background: red; }
+.b { background: blue; }
+.g { background: green; }
+.y { background: yellow; }
+
+.result-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.mini {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.black { background: black; }
+.white { background: white; border: 1px solid #999; }
+
+.secret {
+  background: #222;
+  color: #00ffcc;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}

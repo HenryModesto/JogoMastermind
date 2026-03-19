@@ -1,0 +1,50 @@
+<h2>🎮 Mastermind</h2>
+
+<div *ngIf="gameFinished" class="secret">
+  🔓 Código secreto: {{ secretCode }}
+</div>
+
+<div class="header">
+  <span></span>
+  <div class="letters">
+    <span>A</span><span>B</span><span>C</span><span>D</span>
+  </div>
+</div>
+
+<div *ngIf="gameFinished">
+  <h2>🎉 Você venceu!</h2>
+  <p>Código secreto: {{ secretCode }}</p>
+</div>
+
+<div class="board">
+  <div *ngFor="let row of board; let i = index" class="row">
+
+    <span class="row-number">{{ 10 - i }}</span>
+
+    <div class="slots">
+      <div 
+        *ngFor="let slot of row.guess; let j = index"
+        class="circle"
+        [ngClass]="slot"
+        (click)="selectColor(i, j)"
+      ></div>
+    </div>
+
+    <div class="result-box">
+      <div *ngFor="let b of [].constructor(row.result.black)" class="mini black"></div>
+      <div *ngFor="let w of [].constructor(row.result.white)" class="mini white"></div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="gameFinished">
+
+  <h2 *ngIf="won"> Você venceu!</h2>
+  <h2 *ngIf="!won"> Você perdeu!</h2>
+
+  <p>🔓 Código secreto: {{ secretCode }}</p>
+
+</div>
+
+<button (click)="submitRow()">Enviar</button>
