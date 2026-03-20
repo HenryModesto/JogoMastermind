@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -19,7 +18,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - backend/.env
     command: flask run --host=0.0.0.0
     environment:
       - FLASK_APP=main.py
