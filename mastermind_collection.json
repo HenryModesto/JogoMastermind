@@ -1,0 +1,304 @@
+{
+  "info": {
+    "name": "Mastermind - Case Itaú",
+    "description": "Collection completa da API do jogo Mastermind",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "game_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('token', json.access_token);",
+                  "    console.log('Token salvo:', json.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"player1\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Realiza login e salva o token automaticamente na variável 'token'"
+          },
+          "response": [
+            {
+              "name": "Login - Sucesso",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"access_token\": \"eyJ...\",\n  \"user\": {\n    \"id\": 1,\n    \"username\": \"player1\"\n  }\n}"
+            },
+            {
+              "name": "Login - Credenciais inválidas",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"error\": \"Credenciais inválidas\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"novo_jogador\",\n  \"email\": \"novo@email.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Cadastra um novo usuário no sistema"
+          },
+          "response": [
+            {
+              "name": "Register - Sucesso",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Usuário criado com sucesso\"\n}"
+            },
+            {
+              "name": "Register - Usuário já existe",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"error\": \"Nome de usuário já está em uso\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Games",
+      "item": [
+        {
+          "name": "Criar Nova Partida",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    pm.collectionVariables.set('game_id', json.game_id);",
+                  "    console.log('Game ID salvo:', json.game_id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/games",
+              "host": ["{{base_url}}"],
+              "path": ["games"]
+            },
+            "description": "Cria uma nova partida e salva o game_id automaticamente"
+          },
+          "response": [
+            {
+              "name": "Criar Partida - Sucesso",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"game_id\": 1,\n  \"max_attempts\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "Enviar Tentativa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"digits\": [1, 4, 2, 5]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/games/{{game_id}}/attempt",
+              "host": ["{{base_url}}"],
+              "path": ["games", "{{game_id}}", "attempt"]
+            },
+            "description": "Envia uma tentativa de adivinhação. Dígitos devem ser entre 1 e 6."
+          },
+          "response": [
+            {
+              "name": "Tentativa - Em andamento",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"attempt_number\": 1,\n  \"correct_positions\": 1,\n  \"wrong_positions\": 2,\n  \"status\": \"ongoing\",\n  \"attempts_left\": 9\n}"
+            },
+            {
+              "name": "Tentativa - Vitória",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"attempt_number\": 3,\n  \"correct_positions\": 4,\n  \"wrong_positions\": 0,\n  \"status\": \"won\",\n  \"attempts_left\": 7\n}"
+            },
+            {
+              "name": "Tentativa - Derrota",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"attempt_number\": 10,\n  \"correct_positions\": 0,\n  \"wrong_positions\": 2,\n  \"status\": \"lost\",\n  \"attempts_left\": 0,\n  \"secret_code\": [3, 5, 4, 3]\n}"
+            },
+            {
+              "name": "Tentativa - Dígitos inválidos",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"error\": \"Dígitos devem ser entre 1 e 6 e tamanho exato 4\"\n}"
+            },
+            {
+              "name": "Tentativa - Partida encerrada",
+              "status": "Conflict",
+              "code": 409,
+              "body": "{\n  \"error\": \"Partida já encerrada\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar Estado da Partida",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/games/{{game_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["games", "{{game_id}}"]
+            },
+            "description": "Retorna o estado atual da partida com histórico de tentativas"
+          },
+          "response": [
+            {
+              "name": "Estado da Partida - Sucesso",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"game_id\": 1,\n  \"status\": \"ongoing\",\n  \"attempts\": [\n    {\n      \"attempt_number\": 1,\n      \"digits\": [1, 4, 2, 5],\n      \"correct_positions\": 1,\n      \"wrong_positions\": 2\n    }\n  ],\n  \"attempts_left\": 9\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ranking",
+      "item": [
+        {
+          "name": "Buscar Ranking Global",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ranking",
+              "host": ["{{base_url}}"],
+              "path": ["ranking"]
+            },
+            "description": "Retorna o ranking global com o melhor resultado de cada jogador"
+          },
+          "response": [
+            {
+              "name": "Ranking - Sucesso",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"position\": 1,\n    \"username\": \"player1\",\n    \"attempts\": 2,\n    \"duration_seconds\": 30,\n    \"finished_at\": \"2024-01-15T10:30:00\"\n  },\n  {\n    \"position\": 2,\n    \"username\": \"player2\",\n    \"attempts\": 5,\n    \"duration_seconds\": 45,\n    \"finished_at\": \"2024-01-15T09:00:00\"\n  }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Verifica se a API está online"
+          },
+          "response": [
+            {
+              "name": "Health - OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"status\": \"ok\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

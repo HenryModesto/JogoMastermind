@@ -1,6 +1,0 @@
-Flask
-Flask-Cors
-Flask-SQLAlchemy
-Flask-JWT-Extended
-marshmallow
-python-dotenv

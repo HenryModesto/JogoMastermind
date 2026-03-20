@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "d792ad7d-f1c5-40cc-8fb6-1948832aaa78"
+    "analytics": "025f5b7d-198e-4162-85e3-c9b91fa94d80"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -17,8 +17,9 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
-            "tsConfig": "tsconfig.app.json",
+  "browser": "src/main.ts",
+  "polyfills": ["zone.js"],
+  "tsConfig": "tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
@@ -26,16 +27,10 @@
               }
             ],
             "styles": [
-              "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "security": {
-              "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+              "src/material-theme.scss",
+              "src/styles.css",
+              "node_modules/ngx-toastr/toastr.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -68,7 +63,8 @@
               "buildTarget": "frontend:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

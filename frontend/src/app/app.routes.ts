@@ -1,10 +1,24 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login';
-import { GameComponent } from './pages/game/game.component';
-import { RankingComponent } from './pages/ranking/ranking';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'game', component: GameComponent },
-  { path: 'ranking', component: RankingComponent }
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent) },
+  { 
+    path: 'dashboard', 
+    loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'game/:id', 
+    loadComponent: () => import('./components/game/game.component').then(m => m.GameComponent),
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'ranking', 
+    loadComponent: () => import('./components/ranking/ranking.component').then(m => m.RankingComponent),
+    canActivate: [authGuard]
+  },
+  { path: '**', redirectTo: 'dashboard' }
 ];

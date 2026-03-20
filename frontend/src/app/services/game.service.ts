@@ -1,24 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { GameState, RankingEntry } from '../models/game.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
-  private API = 'http://127.0.0.1:5000/game';
-
-  constructor(private http: HttpClient) {}
-
-  startGame(user_id: number) {
-    return this.http.post(`${this.API}/start`, { user_id });
+  createGame(): Observable<{ game_id: number; max_attempts: number }> {
+    return this.http.post<{ game_id: number; max_attempts: number }>(`${this.apiUrl}/games`, {});
   }
 
-  attempt(data: { user_id: number, guess: string }) {
-    return this.http.post(`${this.API}/attempt`, data);
+  getGame(gameId: number): Observable<GameState> {
+    return this.http.get<GameState>(`${this.apiUrl}/games/${gameId}`);
   }
 
-  getRanking() {
-    return this.http.get(`${this.API}/ranking`);
+  makeAttempt(gameId: number, digits: number[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/games/${gameId}/attempt`, { digits });
+  }
+
+  getRanking(): Observable<RankingEntry[]> {
+    return this.http.get<RankingEntry[]>(`${this.apiUrl}/ranking`);
   }
 }
